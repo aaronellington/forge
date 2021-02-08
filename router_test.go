@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/aaronellington/forge"
+	"github.com/fuzzingbits/forge"
 )
 
 type handlerTestCase struct {

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aaronellington/forge"
+	"github.com/fuzzingbits/forge"
 )
 
 func Test_Static_Success(t *testing.T) {

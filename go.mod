@@ -1,3 +1,3 @@
-module github.com/aaronellington/forge
+module github.com/fuzzingbits/forge
 
 go 1.15

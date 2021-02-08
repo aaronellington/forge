@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aaronellington/forge"
+	"github.com/fuzzingbits/forge"
 )
 
 func Test_Router_Placeholder(t *testing.T) {
