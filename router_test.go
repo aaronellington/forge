@@ -87,14 +87,35 @@ func Test_Router_StripTrailingSlash(t *testing.T) {
 	})
 }
 
-func Test_ResponseJSON(t *testing.T) {
+func Test_RespondHTML(t *testing.T) {
+	type customType struct {
+		Success bool
+	}
+
+	targetBody := "<b>Bold!</b>"
+	router := &forge.Router{}
+	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		forge.RespondHTML(w, http.StatusInternalServerError, []byte(targetBody))
+	}))
+
+	request, _ := http.NewRequest(http.MethodGet, "/", nil)
+
+	handlerTest(t, handlerTestCase{
+		Handler:          router,
+		Request:          request,
+		TargetStatusCode: http.StatusInternalServerError,
+		TargetBody:       targetBody,
+	})
+}
+
+func Test_RespondJSON(t *testing.T) {
 	type customType struct {
 		Success bool
 	}
 
 	router := &forge.Router{}
 	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		forge.ResponseJSON(w, http.StatusInternalServerError, customType{Success: true})
+		forge.RespondJSON(w, http.StatusInternalServerError, customType{Success: true})
 	}))
 
 	request, _ := http.NewRequest(http.MethodGet, "/", nil)

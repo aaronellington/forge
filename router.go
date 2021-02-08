@@ -48,7 +48,7 @@ func (router *Router) Handle(path string, handler http.Handler) {
 }
 
 func notFoundHander(w http.ResponseWriter, r *http.Request) {
-	ResponseText(w, http.StatusNotFound, ResponseTextNotFound)
+	RespondText(w, http.StatusNotFound, []byte(ResponseTextNotFound))
 }
 
 func stripTrailingSlash(w http.ResponseWriter, r *http.Request) bool {

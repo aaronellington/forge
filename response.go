@@ -12,14 +12,21 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-// ResponseText responds to an http.Request with a text body
-func ResponseText(w http.ResponseWriter, statusCode int, body string) {
-	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte(ResponseTextNotFound))
+// RespondText responds to an http.Request with a text body
+func RespondText(w http.ResponseWriter, statusCode int, body []byte) {
+	w.WriteHeader(statusCode)
+	w.Write(body)
 }
 
-// ResponseJSON responds to an http.Request with a JSON body
-func ResponseJSON(w http.ResponseWriter, statusCode int, v interface{}) {
+// RespondHTML responds to an http.Request with a text body
+func RespondHTML(w http.ResponseWriter, statusCode int, body []byte) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(statusCode)
+	w.Write(body)
+}
+
+// RespondJSON responds to an http.Request with a JSON body
+func RespondJSON(w http.ResponseWriter, statusCode int, v interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 
