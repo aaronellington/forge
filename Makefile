@@ -28,3 +28,8 @@ test:
 
 clean:
 	git clean -Xdf
+
+post-lint:
+	@git diff --exit-code --quiet || (echo "There should not be any changes after the lint runs" && git status && exit 1;)
+
+pipeline: full post-lint
