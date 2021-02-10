@@ -18,9 +18,31 @@ func (logger *Logger) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		logger.Log = log.New(os.Stdout, "", log.LstdFlags)
 	}
 
-	logger.Log.Printf("%s", r.URL.Path)
+	recorder := &statusRecorder{
+		ResponseWriter: w,
+		Status:         200,
+	}
 
 	if logger.Handler != nil {
-		logger.Handler.ServeHTTP(w, r)
+		logger.Handler.ServeHTTP(recorder, r)
 	}
+
+	logger.Log.Printf(
+		"%d %s %s %s",
+		recorder.Status,
+		r.RemoteAddr,
+		r.Method,
+		r.RequestURI,
+	)
+
+}
+
+type statusRecorder struct {
+	http.ResponseWriter
+	Status int
+}
+
+func (r *statusRecorder) WriteHeader(status int) {
+	r.Status = status
+	r.ResponseWriter.WriteHeader(status)
 }
