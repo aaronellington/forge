@@ -30,6 +30,7 @@ func (static *Static) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Add(HeaderCacheControl, "no-cache")
 	static.fileServer.ServeHTTP(w, r)
 }
 
