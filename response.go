@@ -20,14 +20,14 @@ func RespondText(w http.ResponseWriter, statusCode int, body []byte) {
 
 // RespondHTML responds to an http.Request with a text body
 func RespondHTML(w http.ResponseWriter, statusCode int, body []byte) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set(HeaderContentType, "text/html; charset=utf-8")
 	w.WriteHeader(statusCode)
 	w.Write(body)
 }
 
 // RespondJSON responds to an http.Request with a JSON body
 func RespondJSON(w http.ResponseWriter, statusCode int, v interface{}) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set(HeaderContentType, "application/json")
 	w.WriteHeader(statusCode)
 
 	encoder := json.NewEncoder(w)
