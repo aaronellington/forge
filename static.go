@@ -50,5 +50,12 @@ func (static *Static) fileExists(path string) bool {
 	}
 	defer file.Close()
 
+	fileInfo, _ := file.Stat()
+	if fileInfo.IsDir() {
+		path += "/index.html"
+
+		return static.fileExists(path)
+	}
+
 	return true
 }
