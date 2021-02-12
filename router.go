@@ -5,11 +5,6 @@ import (
 	"strings"
 )
 
-// Response Texts
-const (
-	ResponseTextNotFound = "Not Found"
-)
-
 // Router serves http.Requests for a predefined map of Paths
 type Router struct {
 	NotFoundHander http.Handler

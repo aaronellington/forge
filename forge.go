@@ -1,7 +1,12 @@
 package forge
 
-// Header constants
+// Header Constants
 const (
 	HeaderContentType  = "Content-Type"
 	HeaderCacheControl = "Cache-Control"
+)
+
+// Response Constants
+const (
+	ResponseTextNotFound = "Not Found"
 )

@@ -34,7 +34,6 @@ func (logger *Logger) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		r.Method,
 		r.RequestURI,
 	)
-
 }
 
 type statusRecorder struct {
