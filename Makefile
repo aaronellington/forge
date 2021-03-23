@@ -15,6 +15,7 @@ help: ## Display general help about this command
 build: build-go ## Build the application
 
 build-go:
+	@go generate
 
 lint: lint-go ## Lint the application
 
@@ -36,9 +37,11 @@ test-go:
 	@go tool cover -func var/coverage.txt | awk '/^total/{print $$1 " " $$3}'
 
 clean: ## Remove files listed in .gitignore (possibly with some exceptions)
+	@git init 2> /dev/null
 	git clean -Xdff
 
 clean-full:
+	@git init 2> /dev/null
 	git clean -Xdff
 
 copy-config: ## Copy missing config files into place
