@@ -146,3 +146,53 @@ func TestProviderEnvironmentPointerSetError(t *testing.T) {
 func TestProviderEnvironmentNotPointer(t *testing.T) {
 	envTestHelper(t, TestEnvStruct{}, TestEnvStruct{}, nil, true)
 }
+
+func TestReadDotEnv(t *testing.T) {
+	targetValues := map[string]string{
+		"FOOBAR1": "SYSTEM",
+		"FOOBAR2": "DEFAULT2",
+		"FOOBAR3": "LOCAL3",
+	}
+
+	dotEnvTestHelper(t, "basic", targetValues, func() {
+		os.Setenv("FOOBAR1", "SYSTEM")
+	})
+}
+
+func TestReadDotEnvNoFiles(t *testing.T) {
+	targetValues := map[string]string{
+		"FOOBAR1": "SYSTEM",
+		"FOOBAR2": "",
+		"FOOBAR3": "",
+	}
+
+	dotEnvTestHelper(t, "fake_directory", targetValues, func() {
+		os.Setenv("FOOBAR1", "SYSTEM")
+	})
+}
+
+func dotEnvTestHelper(t *testing.T, directory string, targetValues map[string]string, setup func()) {
+	// Fix directory
+	wd, _ := os.Getwd()
+	os.Chdir("./test_files/dotenv_tests/" + directory)
+	defer os.Chdir(wd)
+
+	// Reset environment
+	for key := range targetValues {
+		os.Unsetenv(key)
+	}
+
+	// Set environment state
+	setup()
+
+	// Read in the values
+	forge.ReadDotEnv()
+
+	// Confirm results
+	for key, targetValue := range targetValues {
+		actualValue := os.Getenv(key)
+		if targetValue != actualValue {
+			t.Errorf("ReadDotEnv() key: %s = %s ; want: %s", key, actualValue, targetValue)
+		}
+	}
+}

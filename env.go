@@ -2,9 +2,11 @@ package forge
 
 import (
 	"errors"
+	"io/ioutil"
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -18,6 +20,46 @@ var (
 	// ErrUnexportedField returned when a field with tag "env" is not exported.
 	ErrUnexportedField = errors.New("field must be exported")
 )
+
+// ReadDotEnv locates and parses .env files
+func ReadDotEnv() {
+	varGroups := []map[string]string{
+		readDotEnvFile(".env"),
+		readDotEnvFile(".env.local"),
+	}
+
+	for _, varGroup := range varGroups {
+		for key, value := range varGroup {
+			os.Setenv(key, value)
+		}
+	}
+}
+
+func readDotEnvFile(filePath string) map[string]string {
+	results := map[string]string{}
+
+	fileBytes, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return results
+	}
+
+	fileString := string(fileBytes)
+
+	lines := strings.Split(fileString, "\n")
+	for _, line := range lines {
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		key := parts[0]
+		value := parts[1]
+		if _, alreadyExists := os.LookupEnv(key); !alreadyExists {
+			results[key] = value
+		}
+	}
+
+	return results
+}
 
 // ParseEnvironment variables into a existing struct
 func ParseEnvironment(target interface{}) error {
