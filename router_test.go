@@ -88,10 +88,6 @@ func Test_Router_StripTrailingSlash(t *testing.T) {
 }
 
 func Test_RespondHTML(t *testing.T) {
-	type customType struct {
-		Success bool
-	}
-
 	targetBody := "<b>Bold!</b>"
 	router := &forge.Router{}
 	router.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
