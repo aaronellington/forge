@@ -61,8 +61,18 @@ func readDotEnvFile(filePath string) map[string]string {
 	return results
 }
 
-// ParseEnvironment variables into a existing struct
+// ParseEnvironment sources .env files and parses variables into a existing struct
 func ParseEnvironment(target interface{}) error {
+	ReadDotEnv()
+
+	if err := marshalEnvironment(target); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func marshalEnvironment(target interface{}) error {
 	rv := reflect.ValueOf(target)
 	if rv.Kind() != reflect.Ptr || rv.IsNil() {
 		return ErrInvalidValue
